@@ -1,0 +1,25 @@
+# ============================================================
+#  dependencies: 
+#
+# NOTE: torch/torchvision are intentionally listed with a
+# lower-bound only. Install them separately with the correct
+# CUDA or CPU index URL before running `pip install -r requirements.txt`.
+#
+#   GPU (CUDA 12.x):  pip install torch torchvision --index-url https://download.pytorch.org/whl/cu121
+#   GPU (CUDA 13.x):  pip install torch torchvision --index-url https://download.pytorch.org/whl/cu130
+#   CPU only:         pip install torch torchvision --index-url https://download.pytorch.org/whl/cpu
+#
+# The versions below match a working environment as of this project.
+# ============================================================
+
+torch>=2.0
+torchvision>=0.15
+transformers>=4.40
+sentencepiece>=0.1.99
+Pillow>=10.0
+faiss-cpu>=1.7.4
+numpy>=1.24
+pandas>=2.0
+tqdm>=4.65
+streamlit>=1.30
+pytest>=7.4

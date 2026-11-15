@@ -1,0 +1,20 @@
+[
+  {
+    "query_id": "q001",
+    "query": "پدربزرگ در باغ کنار درخت انار",
+    "language": "fa",
+    "type": "compositional"
+  },
+  {
+    "query_id": "q002",
+    "query": "غروب کنار دریا",
+    "language": "fa",
+    "type": "simple"
+  },
+  {
+    "query_id": "q003",
+    "query": "family gathering in spring",
+    "language": "en",
+    "type": "simple"
+  }
+]

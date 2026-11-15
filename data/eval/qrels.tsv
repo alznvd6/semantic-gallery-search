@@ -1,0 +1,5 @@
+query_id	image_id	relevance
+q001	img_0123.jpg	2
+q001	img_0456.jpg	1
+q002	img_0789.jpg	2
+q003	img_0321.jpg	2
