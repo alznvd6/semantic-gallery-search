@@ -2,6 +2,8 @@ data/images/*
 !data/images/.gitkeep
 data/index.faiss
 data/meta.json
+data/model-evaluation/
+evaluation/results*.json
 __pycache__/
 *.py[cod]
 *$py.class
@@ -9,6 +11,7 @@ __pycache__/
 .Python
 build/
 dist/
+node_modules/
 *.egg-info/
 .eggs/
 .venv/
@@ -20,7 +23,6 @@ ENV/
 htmlcov/
 .tox/
 .ipynb_checkpoints/
-.streamlit/secrets.toml
 .cache/
 models/
 .idea/

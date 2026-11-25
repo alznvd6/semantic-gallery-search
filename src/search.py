@@ -2,6 +2,7 @@
 Core search module: embedding, indexing, retrieval.
 
 """
+from functools import lru_cache
 from pathlib import Path
 from typing import Any, Dict, List, Optional, Tuple
 
@@ -10,19 +11,27 @@ import numpy as np
 from src.config import Config
 
 
-def load_model(cfg: Config) -> Tuple[Any, Any]:
-    """Load the CLIP model and processor from HuggingFace.
+@lru_cache(maxsize=1)
+def _load_model(model_name: str, device: str) -> Any:
+    """Load and cache a Jina CLIP model for the requested device."""
+    from transformers import AutoModel
+
+    model = AutoModel.from_pretrained(model_name, trust_remote_code=True)
+    model.to(device)
+    model.eval()
+    return model
+
+
+def load_model(cfg: Config) -> Any:
+    """Load the configured Jina CLIP model from Hugging Face.
 
     Args:
         cfg: project configuration.
 
     Returns:
-        (model, processor) tuple.
-
-    TODO (Phase 2): use transformers.CLIPModel / CLIPProcessor,
-    move model to cfg.device, set to eval mode, cache the result.
+        The evaluation-mode model, placed on cfg.device.
     """
-    raise NotImplementedError("load_model: to be implemented in Phase 2")
+    return _load_model(cfg.model_name, cfg.device)
 
 
 def embed_text(text: str, cfg: Config) -> np.ndarray:
@@ -34,10 +43,30 @@ def embed_text(text: str, cfg: Config) -> np.ndarray:
 
     Returns:
         Vector of shape (cfg.embedding_dim,).
-
-    TODO (Phase 2): tokenize, run text encoder, L2-normalize.
     """
-    raise NotImplementedError("embed_text: to be implemented in Phase 2")
+    import torch
+
+    model = load_model(cfg)
+    with torch.inference_mode():
+        embeddings = model.encode_text(
+            text,
+            task="retrieval.query",
+            truncate_dim=cfg.embedding_dim,
+        )
+
+    vector = np.asarray(
+        embeddings.float().detach().cpu().numpy(), dtype=np.float32
+    ).reshape(-1)
+    if vector.size != cfg.embedding_dim:
+        raise ValueError(
+            f"Expected a {cfg.embedding_dim}-dimensional text embedding, "
+            f"got {vector.size} dimensions."
+        )
+
+    norm = np.linalg.norm(vector)
+    if norm == 0:
+        raise ValueError("The model returned a zero text embedding.")
+    return vector / norm
 
 
 def embed_images(image_paths: List[Path], cfg: Config) -> np.ndarray:

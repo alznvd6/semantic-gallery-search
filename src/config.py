@@ -7,9 +7,9 @@ from pathlib import Path
 class Config:
     """All tunable parameters for the project."""
 
-    model_name: str = "M-CLIP/XLM-Roberta-Large-Vit-B-32"
-    embedding_dim: int = 512
-    device: str = "cuda"          # change to "cpu" if no GPU
+    model_name: str = "jinaai/jina-clip-v2"
+    embedding_dim: int = 1024
+    device: str = "cuda"          
     batch_size: int = 32
 
     images_dir: Path = Path("data/images")

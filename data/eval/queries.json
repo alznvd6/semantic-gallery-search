@@ -1,20 +1,206 @@
 [
   {
     "query_id": "q001",
-    "query": "پدربزرگ در باغ کنار درخت انار",
+    "query": "پرتره مردی سالمند با ریش و موهای سفید، کت‌وشلوار تیره و گل‌های قرمز در پس‌زمینه.",
+    "language": "fa",
+    "type": "simple"
+  },
+  {
+    "query_id": "q002",
+    "query": "An elderly woman in a colorful floral headscarf smiles indoors beside a glowing table lamp.",
+    "language": "en",
+    "type": "compositional"
+  },
+  {
+    "query_id": "q003",
+    "query": "پدربزرگ و مادربزرگ در خانه، نوه خردسالشان را در آغوش گرفته‌اند.",
     "language": "fa",
     "type": "compositional"
   },
   {
-    "query_id": "q002",
-    "query": "غروب کنار دریا",
+    "query_id": "q004",
+    "query": "Two young children sit on a patterned rug and build with colorful wooden blocks.",
+    "language": "en",
+    "type": "compositional"
+  },
+  {
+    "query_id": "q005",
+    "query": "یک خانواده در حیاط دور منقل جمع شده‌اند و پدر کباب را روی آتش آماده می‌کند.",
+    "language": "fa",
+    "type": "compositional"
+  },
+  {
+    "query_id": "q006",
+    "query": "A man relaxes in an armchair and reads a newspaper in a warmly lit living room.",
+    "language": "en",
+    "type": "compositional"
+  },
+  {
+    "query_id": "q007",
+    "query": "اتاق نشیمنی با شومینه سنگی و مبل‌های راحتی که نور نارنجی غروب از پنجره در آن افتاده است.",
+    "language": "fa",
+    "type": "compositional"
+  },
+  {
+    "query_id": "q008",
+    "query": "A detached house at night, with warm lights glowing through its windows.",
+    "language": "en",
+    "type": "simple"
+  },
+  {
+    "query_id": "q009",
+    "query": "صبحانه‌ای کنار پنجره با نان تازه، پنیر، گردو، مربا و یک استکان چای؛ بیرون دریا دیده می‌شود.",
+    "language": "fa",
+    "type": "compositional"
+  },
+  {
+    "query_id": "q010",
+    "query": "A family applauds a girl wearing a tiara as she celebrates her birthday with a cake and balloons.",
+    "language": "en",
+    "type": "compositional"
+  },
+  {
+    "query_id": "q011",
+    "query": "خانواده‌ای روی چمن در فضای سبز پیک‌نیک کرده‌اند و میوه و خوراکی روی پارچه چیده‌اند.",
+    "language": "fa",
+    "type": "compositional"
+  },
+  {
+    "query_id": "q012",
+    "query": "A family sits in a small wooden boat and fishes on a misty lake surrounded by evergreen trees.",
+    "language": "en",
+    "type": "compositional"
+  },
+  {
+    "query_id": "q013",
+    "query": "خانواده‌ای شب کنار آتش در جنگل نشسته‌اند و مارشملو کباب می‌کنند؛ چادرشان کنار آن‌هاست.",
+    "language": "fa",
+    "type": "compositional"
+  },
+  {
+    "query_id": "q014",
+    "query": "Students study at long tables inside a spacious modern library with tall windows and wooden bookshelves.",
+    "language": "en",
+    "type": "compositional"
+  },
+  {
+    "query_id": "q015",
+    "query": "زنی با کلاه بافتنی و عینک اسکی در پیست برفی لبخند می‌زند.",
     "language": "fa",
     "type": "simple"
   },
   {
-    "query_id": "q003",
-    "query": "family gathering in spring",
+    "query_id": "q016",
+    "query": "A brick house entrance with an arched wooden doorway and several patterned rugs displayed outside.",
     "language": "en",
+    "type": "compositional"
+  },
+  {
+    "query_id": "q017",
+    "query": "گردشگری با کلاه حصیری کنار اسکله چوبی ایستاده؛ قایق و آب فیروزه‌ای در پس‌زمینه است.",
+    "language": "fa",
+    "type": "compositional"
+  },
+  {
+    "query_id": "q018",
+    "query": "A young boy blows out the candles on a green dinosaur birthday cake while his family cheers.",
+    "language": "en",
+    "type": "compositional"
+  },
+  {
+    "query_id": "q019",
+    "query": "فنجانی قهوه با طرح برگ روی میز چوبی کنار پنجره‌ای بارانی.",
+    "language": "fa",
     "type": "simple"
+  },
+  {
+    "query_id": "q020",
+    "query": "Parents walk hand in hand with their young daughter along a leafy path in a sunlit park.",
+    "language": "en",
+    "type": "compositional"
+  },
+  {
+    "query_id": "q021",
+    "query": "چند نسل از یک خانواده دور میز شام نشسته‌اند و در خانه‌ای گرم و روشن با هم غذا می‌خورند.",
+    "language": "fa",
+    "type": "compositional"
+  },
+  {
+    "query_id": "q022",
+    "query": "An older man in a knit hat plays chess outdoors with another man across a chessboard.",
+    "language": "en",
+    "type": "compositional"
+  },
+  {
+    "query_id": "q023",
+    "query": "بازار ماهی شلوغی در فضای باز، با فروشنده‌ها و سینی‌های بزرگ پر از ماهی روی زمین خیس.",
+    "language": "fa",
+    "type": "compositional"
+  },
+  {
+    "query_id": "q024",
+    "query": "A crowded subway platform as commuters board a stopped train.",
+    "language": "en",
+    "type": "compositional"
+  },
+  {
+    "query_id": "q025",
+    "query": "دانشجوها زیر درخت در محوطه دانشگاه دور میز پیک‌نیک نشسته‌اند و با هم ناهار می‌خورند.",
+    "language": "fa",
+    "type": "compositional"
+  },
+  {
+    "query_id": "q026",
+    "query": "People wait beneath a glass bus shelter on a wet city street as a bus approaches.",
+    "language": "en",
+    "type": "compositional"
+  },
+  {
+    "query_id": "q027",
+    "query": "ترافیک سنگین خیابان در غروب، با ردیف خودروها زیر آسمان نارنجی و درخشان.",
+    "language": "fa",
+    "type": "compositional"
+  },
+  {
+    "query_id": "q028",
+    "query": "A woman plays with a large light-colored dog that jumps up toward a toy in a grassy field.",
+    "language": "en",
+    "type": "compositional"
+  },
+  {
+    "query_id": "q029",
+    "query": "زنی سگ گلدن رتریور را در مسیری سرسبز و در پارکی پر از درخت به پیاده‌روی برده است.",
+    "language": "fa",
+    "type": "compositional"
+  },
+  {
+    "query_id": "q030",
+    "query": "A male singer performs into a microphone on a dark stage under concert lights.",
+    "language": "en",
+    "type": "compositional"
+  },
+  {
+    "query_id": "q031",
+    "query": "گروهی در زمین شنی پارک والیبال بازی می‌کنند و تور وسط زمین کشیده شده است.",
+    "language": "fa",
+    "type": "compositional"
+  },
+  {
+    "query_id": "q032",
+    "query": "A young boy sits on a living-room rug and feeds a rabbit a leafy vegetable.",
+    "language": "en",
+    "type": "compositional"
+  },
+  {
+    "query_id": "q033",
+    "query": "توپ فوتبال سیاه‌وسفیدی روی چمن، نزدیک خط سفید زمین.",
+    "language": "fa",
+    "type": "simple"
+  },
+  {
+    "query_id": "q034",
+    "query": "Friends sit together in a cozy living room, chatting around a coffee table with snacks and drinks.",
+    "language": "en",
+    "type": "compositional"
   }
 ]
