@@ -108,9 +108,9 @@ npm run dev
 ```
 
 The frontend is in `app/frontend/`; its FastAPI backend is in `app/backend/`.
-The backend delegates to `src/search.py`, where image indexing and retrieval
-still need to be implemented before searches can return results. The frontend
-is intentionally a basic scaffold; its UI/UX can be shaped later.
+The backend delegates to `src/search.py` for image indexing and retrieval.
+Build the image index with `python cli.py build-index` before searching. The
+frontend is intentionally a basic scaffold; its UI/UX can be shaped later.
 
 To compare standalone HTML designs with styles and color palettes kept inside
 each file, open `http://localhost:5173/ui-designs/` while the frontend dev server

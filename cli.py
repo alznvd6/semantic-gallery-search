@@ -4,8 +4,6 @@ Two subcommands:
     python cli.py build-index
     python cli.py search "your query" -k 5
 
-TODO (Phase 2): the actual work is done in src/search.py.
-This file only wires argparse to those functions.
 """
 import argparse
 

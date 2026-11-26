@@ -5,9 +5,10 @@ import json
 import re
 import time
 from collections import defaultdict
+from datetime import datetime, timezone
 from pathlib import Path
 from statistics import mean
-from typing import Any, Dict, List, Tuple
+from typing import Any, Dict, List, Optional, Tuple
 
 from evaluation.metrics import (
     average_precision,
@@ -81,16 +82,30 @@ def _read_evaluation_data() -> Tuple[List[Dict[str, Any]], Dict[str, Dict[str, i
     return queries, dict(qrels)
 
 
-def _model_config(model: Dict[str, Any], device: str) -> Config:
+def _model_config(
+    model: Dict[str, Any], device: str, batch_size: int
+) -> Config:
     safe_name = re.sub(r"[^A-Za-z0-9._-]+", "_", model["model_name"])
     artifact_dir = PROJECT_ROOT / "data" / "model-evaluation" / safe_name
     return Config(
         model_name=model["model_name"],
         embedding_dim=model["embedding_dim"],
         device=device,
+        batch_size=batch_size,
         index_path=artifact_dir / "index.faiss",
         meta_path=artifact_dir / "meta.json",
     )
+
+
+def _select_models(
+    models: List[Dict[str, Any]], model_name: Optional[str]
+) -> List[Dict[str, Any]]:
+    if model_name is None:
+        return models
+    selected = [model for model in models if model["model_name"] == model_name]
+    if not selected:
+        raise ValueError(f"Model {model_name!r} is not configured.")
+    return selected
 
 
 def _evaluate_model(
@@ -98,8 +113,9 @@ def _evaluate_model(
     queries: List[Dict[str, Any]],
     qrels: Dict[str, Dict[str, int]],
     device: str,
+    batch_size: int,
 ) -> Dict[str, Any]:
-    cfg = _model_config(model, device)
+    cfg = _model_config(model, device, batch_size)
     index_start = time.perf_counter()
     search_mod.build_index(cfg)
     index_build_seconds = time.perf_counter() - index_start
@@ -109,14 +125,30 @@ def _evaluate_model(
         started = time.perf_counter()
         ranked_paths = search_mod.search(query["query"], cfg, k=TOP_K)
         latency_ms = (time.perf_counter() - started) * 1000
-        ranked_ids = [Path(path).name for path, _score in ranked_paths]
         grades = qrels[query["query_id"]]
         relevant_ids = {image_id for image_id, grade in grades.items() if grade > 0}
+        ranked_results = [
+            {
+                "rank": rank,
+                "image_id": Path(path).name,
+                "score": float(score),
+                "relevance": grades.get(Path(path).name, 0),
+            }
+            for rank, (path, score) in enumerate(ranked_paths, start=1)
+        ]
+        ranked_ids = [result["image_id"] for result in ranked_results]
         query_results.append(
             {
                 "query_id": query["query_id"],
+                "query": query["query"],
                 "language": query["language"],
                 "type": query["type"],
+                "relevant_images": [
+                    {"image_id": image_id, "relevance": grade}
+                    for image_id, grade in sorted(grades.items())
+                    if grade > 0
+                ],
+                "top_results": ranked_results,
                 "recall@5": recall_at_k(ranked_ids, relevant_ids, 5),
                 "map@10": average_precision(ranked_ids, relevant_ids, TOP_K),
                 "ndcg@10": ndcg_at_k(ranked_ids, grades, TOP_K),
@@ -154,6 +186,9 @@ def _evaluate_model(
     return {
         "name": model["name"],
         "model_name": model["model_name"],
+        "embedding_dim": model["embedding_dim"],
+        "device": device,
+        "batch_size": batch_size,
         "query_count": len(query_results),
         "index_build_seconds": index_build_seconds,
         "metrics": metrics,
@@ -214,6 +249,17 @@ def main() -> None:
         help="Inference device; use the same device for every model.",
     )
     parser.add_argument(
+        "--model-name",
+        default=None,
+        help="Evaluate only this configured Hugging Face model ID.",
+    )
+    parser.add_argument(
+        "--batch-size",
+        type=int,
+        default=Config().batch_size,
+        help="Number of images to encode per batch.",
+    )
+    parser.add_argument(
         "--output",
         type=Path,
         default=None,
@@ -221,8 +267,12 @@ def main() -> None:
     )
     args = parser.parse_args()
 
+    if args.batch_size <= 0:
+        parser.error("--batch-size must be a positive integer.")
+
     try:
         models = _read_models(args.models)
+        models = _select_models(models, args.model_name)
         queries, qrels = _read_evaluation_data()
     except (OSError, ValueError, KeyError) as exc:
         parser.error(str(exc))
@@ -239,11 +289,20 @@ def main() -> None:
     if len(models) < 2:
         print("Only one model is configured; add candidates to compare models.")
 
+    started_at = datetime.now(timezone.utc)
     results = []
     for model in models:
         print(f"Evaluating {model['name']} ({model['model_name']})...")
         try:
-            results.append(_evaluate_model(model, queries, qrels, args.device))
+            results.append(
+                _evaluate_model(
+                    model,
+                    queries,
+                    qrels,
+                    args.device,
+                    args.batch_size,
+                )
+            )
         except NotImplementedError as exc:
             parser.exit(
                 2,
@@ -253,8 +312,23 @@ def main() -> None:
     _print_results(results)
     if args.output is not None:
         args.output.parent.mkdir(parents=True, exist_ok=True)
+        config = Config()
+        report = {
+            "evaluation": {
+                "started_at_utc": started_at.isoformat(),
+                "completed_at_utc": datetime.now(timezone.utc).isoformat(),
+                "queries_file": config.queries_path.as_posix(),
+                "qrels_file": config.qrels_path.as_posix(),
+                "query_count": len(queries),
+                "labeled_query_count": len(qrels),
+                "top_k": TOP_K,
+                "device": args.device,
+                "batch_size": args.batch_size,
+            },
+            "models": results,
+        }
         with args.output.open("w", encoding="utf-8") as file:
-            json.dump(results, file, ensure_ascii=False, indent=2)
+            json.dump(report, file, ensure_ascii=False, indent=2)
         print(f"\nFull results saved to {args.output}")
 
 

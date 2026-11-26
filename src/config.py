@@ -12,10 +12,10 @@ class Config:
     device: str = "cuda"          
     batch_size: int = 32
 
-    images_dir: Path = Path("data/images")
-    index_path: Path = Path("data/index.faiss")
-    meta_path: Path = Path("data/meta.json")
-    queries_path: Path = Path("data/eval/queries.json")
-    qrels_path: Path = Path("data/eval/qrels.tsv")
+    images_dir: Path = Path("D:\\semantic-photo-search\\data\\images")
+    index_path: Path = Path("D:\\semantic-photo-search\\data\\index.faiss")
+    meta_path: Path = Path("D:\\semantic-photo-search\\data\\meta.json")
+    queries_path: Path = Path("D:\\semantic-photo-search\\data\\eval\\queries.json")
+    qrels_path: Path = Path("D:\\semantic-photo-search\\data\\eval\\qrels.tsv")
 
     top_k: int = 10
