@@ -193,9 +193,9 @@ function PhotoCard({ photo, onOpen }) {
   );
 }
 
-function Gallery({ items, feed, onOpen }) {
+function Gallery({ items, feed, ranked = false, onOpen }) {
   return (
-    <div className={`gallery${feed ? " feed" : ""}`}>
+    <div className={`gallery${feed ? " feed" : ""}${ranked ? " ranked" : ""}`}>
       {items.map((photo, index) => (
         <PhotoCard key={`${photo.id}-${index}`} photo={photo} onOpen={() => onOpen(index)} />
       ))}
@@ -662,7 +662,7 @@ function App() {
   ) : galleryError && !allPhotos.length ? (
     <EmptyState
       title="ارتباط با سرویس برقرار نشد."
-      note="بک‌اند را با run_app_backend.ps1 اجرا کنید و صفحه را دوباره باز کنید."
+      note="از پوشه‌ی اصلی پروژه، دستور python run_app.py را اجرا کنید و صفحه را دوباره باز کنید."
     >
       {galleryError}
     </EmptyState>
@@ -818,7 +818,6 @@ function App() {
               <span className="index-btn-text">{indexLabel}</span>
             </button>
             <span className={`model-status ${modelStatus.tone}`} title={modelStatus.text}>
-              <span className="dot" aria-hidden="true" />
               {modelStatus.text}
             </span>
             <button
@@ -958,6 +957,7 @@ function App() {
               <Gallery
                 items={displayed}
                 feed={isFeed}
+                ranked={search.status === "done"}
                 onOpen={(index) => setLightboxIndex(index)}
               />
             )}

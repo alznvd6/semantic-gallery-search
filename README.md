@@ -10,25 +10,20 @@ Describe what you remember — find the closest matching photos.
 - [Features](#features)
 - [Tech Stack](#tech-stack)
 - [Project Structure](#project-structure)
-- [Prerequisites](#prerequisites)
-- [Installation](#installation)
-- [Usage](#usage)
-- [Model Selection](#model-selection)
-- [Evaluation](#evaluation)
-- [Development Status](#development-status)
-- [Resources](#resources)
+- [Running the Application](#running-the-application)
 
 ---
 
 ## Features
 
-- **Text-to-image search** in Persian and English
+- **Text-to-image search** in Persian & English
 - **Vector indexing** with FAISS for fast search (millisecond-level)
-- **React UI** for interactive search
 - **CLI** for batch indexing and search
 - **Automated evaluation** with standard metrics (Recall@K, mAP, nDCG, MRR)
 - **Modular architecture** — swap models by changing two lines in `config.py`
 
+![Semantic Gallery search screen](docs/shot_1.png)
+![Semantic Gallery search screen2](docs/shot_2.png)
 ---
 
 ## Tech Stack
@@ -52,64 +47,74 @@ app/
     search_service.py   # Application-facing search service
   frontend/
     index.html
-    package.json        # Frontend dependencies and scripts
+    package.json        
     vite.config.js
-    ui-designs/         # Standalone HTML design prototypes
-      index.html
-      terracotta.html
     src/
       App.jsx
       main.jsx
       styles.css
-evaluation/             # Terminal-only model comparison
+evaluation/             # model comparison
   models.json
   runner.py
   metrics.py
 src/
-  config.py             # Search configuration
+  config.py            
   search.py             # Embedding, indexing, and retrieval core
 cli.py                  # Command-line interface
-evaluate.py             # Terminal model-evaluation entry point
+evaluate.py             
 data/
-  images/               # Photo gallery
+  images/              
 tests/
 ```
 
 ## Running the Application
 
-Install the frontend packages:
+### One-time setup
+
+Install Conda and Node.js (which includes npm). If you do not already have a
+Python environment for the app, create one in PowerShell:
 
 ```powershell
-cd app/frontend
-npm install
+conda create -n dl_env python=3.11 -y
+conda activate dl_env
 ```
 
-Start the backend from the repository root. The launcher checks CUDA and the
-cached Jina weights, then runs the backend in the existing `dl_env` Conda
-environment:
+Install a PyTorch build that matches your hardware using the
+[PyTorch installation selector](https://pytorch.org/get-started/locally/),
+then install the remaining project dependencies:
 
 ```powershell
-.\run_app_backend.ps1
+python -m pip install -r requirements.txt
 ```
 
-In another terminal, start the React frontend:
+Add your photos to `data/images/`.
+
+### Start
+
+From the repository root, with the Python environment active and Node.js/npm
+available on your `PATH`, run:
 
 ```powershell
-cd app/frontend
-npm run dev
+python run_app.py
 ```
 
-The frontend is in `app/frontend/`; its FastAPI backend is in `app/backend/`.
+The runner starts the FastAPI backend and Vite frontend together, installs the
+frontend packages on first run if needed, and stops both processes when you
+press `Ctrl+C`. It uses the active Python environment; it does not activate
+Conda for you.
+
+By default, the app is available at `http://127.0.0.1:5173` and the backend
+health endpoint at `http://127.0.0.1:8000/api/health`. To change the frontend
+port or disable backend auto-reload, pass runner options, for example:
+
+```powershell
+python run_app.py --frontend-port 5174 --no-reload
+```
+
 The backend uses Jina CLIP v2 on CUDA to index and search the local image
-gallery. Open `http://127.0.0.1:5173` to use the Persian RTL interface. The
-gallery appears from the local image folder immediately; the first search
-loads Jina and builds the FAISS index, which can take several minutes. Later
-searches reuse the saved index at `data/index.faiss`.
-
-To compare standalone HTML designs with styles and color palettes kept inside
-each file, open `http://localhost:5173/ui-designs/` while the frontend dev server
-is running. Add or duplicate HTML files in `app/frontend/ui-designs/` to try
-more variations.
+gallery. The gallery appears from the local image folder immediately; the
+first search loads Jina and builds the FAISS index, which can take several
+minutes. Later searches reuse the saved index at `data/index.faiss`.
 
 Model comparison is separate from the application and runs in the terminal.
 Configure candidates in `evaluation/models.json`, then run
