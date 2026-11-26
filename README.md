@@ -33,9 +33,6 @@ Describe what you remember — find the closest matching photos.
 | Embedding Model | Jina CLIP v2 | Converts multilingual text and images into a shared 1,024-dimensional vector space |
 | Vector Index | FAISS (`IndexFlatIP`) | Cosine similarity search |
 | Framework | PyTorch + Hugging Face Transformers | Model loading and inference |
-| UI | React, HTML, and CSS | Web frontend |
-| Testing | pytest | Unit tests |
-
 ---
 
 ## Project Structure
