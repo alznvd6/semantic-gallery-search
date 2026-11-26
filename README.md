@@ -77,40 +77,34 @@ tests/
 
 ## Running the Application
 
-Create and activate a Python virtual environment, then install the dependencies
-from the repository root. Install the appropriate PyTorch build for your hardware
-as noted in `requirements.txt`:
-
-```bash
-python -m venv .venv
-.\.venv\Scripts\Activate.ps1
-python -m pip install -r requirements.txt
-```
-
 Install the frontend packages:
 
-```bash
+```powershell
 cd app/frontend
 npm install
 ```
 
-Start the backend from the repository root:
+Start the backend from the repository root. The launcher checks CUDA and the
+cached Jina weights, then runs the backend in the existing `dl_env` Conda
+environment:
 
-```bash
-uvicorn app.backend.api:app --reload
+```powershell
+.\run_app_backend.ps1
 ```
 
 In another terminal, start the React frontend:
 
-```bash
+```powershell
 cd app/frontend
 npm run dev
 ```
 
 The frontend is in `app/frontend/`; its FastAPI backend is in `app/backend/`.
-The backend delegates to `src/search.py` for image indexing and retrieval.
-Build the image index with `python cli.py build-index` before searching. The
-frontend is intentionally a basic scaffold; its UI/UX can be shaped later.
+The backend uses Jina CLIP v2 on CUDA to index and search the local image
+gallery. Open `http://127.0.0.1:5173` to use the Persian RTL interface. The
+gallery appears from the local image folder immediately; the first search
+loads Jina and builds the FAISS index, which can take several minutes. Later
+searches reuse the saved index at `data/index.faiss`.
 
 To compare standalone HTML designs with styles and color palettes kept inside
 each file, open `http://localhost:5173/ui-designs/` while the frontend dev server

@@ -173,7 +173,8 @@ def embed_images(image_paths: List[Path], cfg: Config) -> np.ndarray:
     return np.concatenate(batches, axis=0)
 
 
-def _image_paths(images_dir: Path) -> List[Path]:
+def list_images(images_dir: Path) -> List[Path]:
+    """List supported image files in a gallery directory."""
     if not images_dir.is_dir():
         raise FileNotFoundError(f"Image directory does not exist: {images_dir}")
     return sorted(
@@ -221,7 +222,7 @@ def build_index(cfg: Config) -> None:
 
     if cfg.batch_size <= 0:
         raise ValueError("batch_size must be a positive integer.")
-    image_paths = _image_paths(cfg.images_dir)
+    image_paths = list_images(cfg.images_dir)
     if not image_paths:
         raise ValueError(f"No supported images found in {cfg.images_dir}.")
 
@@ -290,8 +291,10 @@ def search(
         np.ascontiguousarray(vector.reshape(1, -1), dtype=np.float32),
         min(result_count, index.ntotal),
     )
-    return [
+    matches = [
         (metadata[int(row_id)], float(score))
         for row_id, score in zip(row_ids[0], scores[0])
         if int(row_id) in metadata
     ]
+    # Always hand back the closest matches first, whatever the index returns.
+    return sorted(matches, key=lambda match: match[1], reverse=True)
