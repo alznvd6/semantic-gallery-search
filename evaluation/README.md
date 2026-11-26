@@ -49,33 +49,9 @@ The configured checkpoints are cached on the E: drive. In PowerShell, point
 Hugging Face at that cache before running evaluation:
 
 ```powershell
-$env:HF_HOME = "E:\semantic-photo-search-models"
+$env:HF_HOME = ".... /semantic-photo-search-models"
 python evaluate.py --device cuda --output evaluation/results.json
 ```
 
-For CPU-only runs, use the per-model scripts. They check free RAM before
-starting, use batch size 1, keep the Python environment and result files on E:,
-and install the CPU requirements there on first use:
-
-```powershell
-.\evaluation\run_jina_cpu.ps1
-.\evaluation\run_embeddinggemma_cpu.ps1
-# Run separately after the other candidates:
-.\evaluation\run_qwen_cpu.ps1
-```
-
-The RAM checks are conservative estimates, not guarantees. Each run writes a
-timestamped result JSON under `E:\semantic-photo-search-results`.
-
-For Jina CLIP v2 on an NVIDIA GPU, run:
-
-```powershell
-.\evaluation\run_jina_gpu.ps1
-```
-
-The script activates the existing Conda environment `dl_env` and verifies that
-CUDA-enabled PyTorch and Transformers `>=4.57,<5` are available; it does not
-install or modify packages. The Transformers range is required by Jina's cached
-model code. It requires an NVIDIA driver, at least 6 GB free system RAM, and at
-least 3 GB free GPU memory; it runs with batch size 1 and writes a timestamped
-result JSON under `E:\semantic-photo-search-results`.
+Use the same `evaluate.py` command for all configured models; choose `--device cpu`
+or `--device cuda` based on the hardware available.
