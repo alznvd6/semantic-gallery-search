@@ -12,29 +12,25 @@ from src import search as search_mod
 
 
 def cmd_build_index(_args: argparse.Namespace) -> None:
-    """Handle the `build-index` subcommand."""
     cfg = Config()
-    print(f"Building index from {cfg.images_dir} ...")
+    print(f"Building index from {cfg.images_dir}.")
     search_mod.build_index(cfg)
     print(f"Index written to {cfg.index_path}")
 
 
 def cmd_search(args: argparse.Namespace) -> None:
-    """Handle the `search` subcommand."""
     cfg = Config()
     results = search_mod.search(args.query, cfg, k=args.k)
     if not results:
-        print("No results.")
+        print("No results")
         return
     for path, score in results:
         print(f"{score:.4f}  {path}")
 
 
 def main() -> None:
-    """Parse CLI arguments and dispatch."""
     parser = argparse.ArgumentParser(prog="cli.py")
     sub = parser.add_subparsers(dest="command", required=True)
-
     p_build = sub.add_parser("build-index", help="Build FAISS index from images")
     p_build.set_defaults(func=cmd_build_index)
 
